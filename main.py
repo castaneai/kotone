@@ -1,16 +1,15 @@
 import os
-from pathlib import Path
-from gmusicapi import Musicmanager, Mobileclient
+import kotone
 
-cred_path = str(Path.home().joinpath(".kotone-cred.json"))
-if not os.path.exists(cred_path):
-    Mobileclient.perform_oauth(cred_path)
-    print(f"save credentials to {cred_path}")
+mc = kotone._new_mc(os.environ["KOTONE_DEVICE_ID"])
+mm = kotone._new_mm()
 
-mc = Mobileclient()
-device_id = os.environ["KOTONE_DEVICE_ID"]
-if not mc.oauth_login(device_id, cred_path):
-    raise RuntimeError('login failed')
+ss = mm.get_purchased_songs()[0]
+song =  next(s for s in mc.get_all_songs() if s["id"] == ss["id"])
 
-for song in mc.get_all_songs():
-    print(song["title"])
+print(song)
+
+# print(f"downloading... {song['title']}")
+# name, data = mm.download_song(song["id"])
+# with open(name, "wb") as f:
+#   f.write(data)
