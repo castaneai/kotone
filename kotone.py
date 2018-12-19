@@ -1,26 +1,20 @@
-import os
-from pathlib import Path
+import oauth2client.client
 from gmusicapi import Musicmanager, Mobileclient
 
-
-_CRED_PATH_MM = str(Path.home().joinpath(".kotone-cred-mm.json"))
-_CRED_PATH_MC = str(Path.home().joinpath(".kotone-cred-mc.json"))
-
-
-def _new_mm() -> Musicmanager:
-    if not os.path.exists(_CRED_PATH_MM):
-        Musicmanager.perform_oauth(_CRED_PATH_MM)
-    mm = Musicmanager()
-    if not mm.login(_CRED_PATH_MM):
-        raise RuntimeError("login failed")
-    return mm
+_UPLOADER_ID = '60:98:75:FD:D5:0F'
+_UPLOADER_NAME = 'Kotone'
 
 
-def _new_mc(device_id: str) -> Mobileclient:
-    if not os.path.exists(_CRED_PATH_MC):
-        Mobileclient.perform_oauth(_CRED_PATH_MC)
-    mc = Mobileclient()
-    if not mc.oauth_login(device_id, _CRED_PATH_MC):
-        raise RuntimeError("login failed")
-    return mc
+class Kotone:
+
+    def __init__(self, device_id: str, cred_mc: oauth2client.client.OAuth2Credentials, cred_mm: oauth2client.client.OAuth2Credentials):
+        self._mc = Mobileclient()
+        if not self._mc.oauth_login(device_id, cred_mc):
+            raise RuntimeError('Mobileclient login failed')
+        self._mm = Musicmanager()
+        if not self._mm.login(cred_mm, _UPLOADER_ID, _UPLOADER_NAME):
+            raise RuntimeError('Musicmanager login failed')
+
+    def get_songs(self):
+        return self._mc.get_all_songs()
 

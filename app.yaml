@@ -1,0 +1,4 @@
+service: kotone
+runtime: python37
+includes:
+  - .env.yaml

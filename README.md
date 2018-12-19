@@ -1,2 +1,24 @@
 # kotone
-#ことね教
+
+## API
+
+### `GET /auth` 
+(For admin) save OAuth2 access token to Cloud Datastore
+
+### `GET /api/songs`
+List all songs as JSON
+
+## Deploy
+
+```sh
+cp .env.yaml.example .env.yaml
+vi .env.yaml  # Put your device id!
+gcloud app deploy 
+```
+
+## Development
+
+```sh
+pip install -r requirements.txt
+python main.py
+```

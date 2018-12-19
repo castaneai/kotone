@@ -1,15 +1,34 @@
 import os
-import kotone
+from flask import Flask, request, jsonify, render_template
+from kotone import Kotone
+import credstore
 
-mc = kotone._new_mc(os.environ["KOTONE_DEVICE_ID"])
-mm = kotone._new_mm()
+app = Flask(__name__, template_folder='.')
+DEVICE_ID = os.environ['KOTONE_DEVICE_ID']
 
-ss = mm.get_purchased_songs()[0]
-song =  next(s for s in mc.get_all_songs() if s["id"] == ss["id"])
 
-print(song)
+@app.route('/auth', methods=['GET', 'POST'])
+def auth():
+    flow_mc, flow_mm = credstore.get_flows()
+    code_mc = request.form.get('code_mc', None)
+    code_mm = request.form.get('code_mm', None)
+    if None in (code_mc, code_mm):
+        return render_template('auth.html',
+                               auth_url_mc=flow_mc.step1_get_authorize_url(),
+                               auth_url_mm=flow_mm.step1_get_authorize_url())
+    cred_mc = flow_mc.step2_exchange(code_mc)
+    cred_mm = flow_mm.step2_exchange(code_mm)
+    credstore.save_creds(cred_mc, cred_mm)
 
-# print(f"downloading... {song['title']}")
-# name, data = mm.download_song(song["id"])
-# with open(name, "wb") as f:
-#   f.write(data)
+    return jsonify(status='OK', client_id_mc=cred_mc.client_id, client_id_mm=cred_mm.client_id)
+
+
+@app.route('/api/songs')
+def hello():
+    cred_mc, cred_mm = credstore.get_creds()
+    kotone = Kotone(DEVICE_ID, cred_mc, cred_mm)
+    return jsonify(kotone.get_songs())
+
+
+if __name__ == '__main__':
+    app.run()
