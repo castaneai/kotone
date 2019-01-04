@@ -17,8 +17,10 @@ const mockSongs: Song[] = [
 
 export function fetchSongs(): Promise<Song[]> {
     return new Promise<Song[]>((resolve, reject) => {
-        const songs = mockSongs.concat(mockSongs).concat(mockSongs).concat(mockSongs)
-        resolve(songs)
+        setTimeout(() => {
+            const songs = mockSongs.concat(mockSongs).concat(mockSongs).concat(mockSongs)
+            resolve(songs)
+        }, 3000);
     })
 }
 

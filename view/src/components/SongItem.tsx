@@ -25,10 +25,10 @@ const SongItem: SFC<SongProps> = ({ song, classes, onClickDownload }) =>
     <Card className={classes.card}>
         <CardMedia className={classes.cover} image={song.albumArtRef.length > 0 ? song.albumArtRef[0].url : ''} />
         <CardContent>
-            <Typography noWrap component="h5" variant="h5">{song.title}</Typography>
-            <Typography noWrap variant="subtitle1" color="textSecondary">{song.artist}</Typography>
+            <Typography noWrap variant="subtitle2">{song.title}</Typography>
+            <Typography noWrap variant="caption" color="textSecondary">{song.artist}</Typography>
         </CardContent>
-        <CardActions disableActionSpacing={true}>
+        <CardActions disableActionSpacing>
             <Button size="small" color="primary" onClick={() => onClickDownload(song)}><CloudDownload className={classes.downloadIcon} fontSize="small" />Download</Button>
         </CardActions>
     </Card>

@@ -1,4 +1,4 @@
-import React, { Component, Props } from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import SongList from './components/SongList';
 import { Song } from './Song';
@@ -26,7 +26,7 @@ class App extends Component<{}, AppState> {
     return <React.Fragment>
       <CssBaseline />
       {this.state.songs.length > 0 ? <SongList songs={this.state.songs} /> : <Loading />}
-      </React.Fragment>
+    </React.Fragment>
   }
 }
 
