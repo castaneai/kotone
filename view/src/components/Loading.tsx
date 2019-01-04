@@ -1,7 +1,9 @@
 import React, { SFC } from "react"
-import { CircularProgress } from "@material-ui/core"
+import { CircularProgress, Grid } from "@material-ui/core"
 
 const Loading: SFC = () =>
-    <CircularProgress />
+    <Grid container justify="center">
+        <CircularProgress />
+    </Grid>
 
 export default Loading

@@ -13,8 +13,7 @@ const styles = (theme: Theme) => createStyles({
         width: 200,
     },
     cover: {
-        height: 0,
-        paddingTop: '100%',
+        height: 200 * 3/4,
     },
     downloadIcon: {
         marginRight: theme.spacing.unit,
