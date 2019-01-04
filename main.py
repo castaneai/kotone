@@ -32,6 +32,18 @@ def get_songs():
     return jsonify(kotone.get_songs())
 
 
+@app.route('/api/stream/<song_id>')
+def stream(song_id):
+    cred_mc, cred_mm = credstore.get_creds()
+    kotone = Kotone(DEVICE_ID, cred_mc, cred_mm)
+    try:
+        stream_url = kotone.stream_url(song_id)
+    except Exception as e:
+        if 'Not Found' in str(e):
+            abort(404)
+    return jsonify(stream_url=stream_url)
+
+
 @app.route('/api/download/<song_id>')
 def download(song_id):
     cred_mc, cred_mm = credstore.get_creds()

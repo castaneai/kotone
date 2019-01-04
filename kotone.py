@@ -21,3 +21,6 @@ class Kotone:
 
     def download_song(self, song_id: str) -> Tuple[str, bytes]:
         return self._mm.download_song(song_id)
+
+    def stream_url(self, song_id: str) -> str:
+        return self._mc.get_stream_url(song_id)

@@ -8,6 +8,9 @@
 ### `GET /api/songs`
 List all songs as JSON
 
+### `GET /api/stream/<song_id>`
+Get stream URL
+
 ### `GET /api/download/<song_id>`
 Download song as file
 
