@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify, render_template, send_file, abort
 from kotone import Kotone
 from credstore import get_flows, CloudDatastoreCredStore, LocalCredStore
 
-app = Flask(__name__, template_folder='.')
+app = Flask(__name__, template_folder='.', static_folder='./view/build', static_url_path='')
 DEVICE_ID = os.environ['KOTONE_DEVICE_ID']
 credstore = CloudDatastoreCredStore() if 'GAE_APPLICATION' in os.environ else LocalCredStore()
 
@@ -28,6 +28,8 @@ def auth():
 @app.route('/api/songs')
 def get_songs():
     cred_mc, cred_mm = credstore.get_creds()
+    if None in (cred_mc, cred_mm):
+        abort(401)
     kotone = Kotone(DEVICE_ID, cred_mc, cred_mm)
     return jsonify(kotone.get_songs())
 
@@ -35,6 +37,8 @@ def get_songs():
 @app.route('/api/stream/<song_id>')
 def stream(song_id):
     cred_mc, cred_mm = credstore.get_creds()
+    if None in (cred_mc, cred_mm):
+        abort(401)
     kotone = Kotone(DEVICE_ID, cred_mc, cred_mm)
     try:
         stream_url = kotone.stream_url(song_id)
