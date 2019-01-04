@@ -8,6 +8,9 @@
 ### `GET /api/songs`
 List all songs as JSON
 
+### `GET /api/download/<song_id>`
+Download song as file
+
 ## Deploy
 
 ```sh

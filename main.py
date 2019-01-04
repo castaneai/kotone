@@ -24,6 +24,7 @@ def auth():
 
     return jsonify(status='OK', client_id_mc=cred_mc.client_id, client_id_mm=cred_mm.client_id)
 
+
 @app.route('/api/songs')
 def get_songs():
     cred_mc, cred_mm = credstore.get_creds()
