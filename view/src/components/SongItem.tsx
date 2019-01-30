@@ -24,7 +24,7 @@ const styles = (theme: Theme) => createStyles({
 const SongItem: SFC<SongProps> = ({ song, classes, onClickDownload, onClickPlay }) =>
     <Card className={classes.card}>
         <CardActionArea onClick={() => onClickPlay(song)}>
-            <CardMedia className={classes.cover} image={song.albumArtRef.length > 0 ? song.albumArtRef[0].url : ''} />
+            <CardMedia className={classes.cover} image={song.albumArtRef && song.albumArtRef.length > 0 ? song.albumArtRef[0].url : ''} />
             <CardContent>
                 <Typography noWrap variant="subtitle2">{song.title}</Typography>
                 <Typography noWrap variant="caption" color="textSecondary">{song.artist}</Typography>
