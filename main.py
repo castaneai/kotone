@@ -1,5 +1,6 @@
 import os
 import io
+import tempfile
 from flask import Flask, request, jsonify, render_template, send_file, abort
 from kotone import Kotone
 from credstore import get_flows, CloudDatastoreCredStore, LocalCredStore
@@ -60,6 +61,22 @@ def download(song_id):
         else:
             raise
     return send_file(io.BytesIO(data), 'audio/mp3', as_attachment=True, attachment_filename=fname)
+
+
+@app.route('/api/upload', methods=['POST'])
+def upload():
+    if 'file[]' not in request.files:
+        return abort(422)
+    paths = []
+    for f in request.files.getlist('file[]'):
+        tf = tempfile.NamedTemporaryFile()
+        f.save(tf.name)
+        paths.append(tf.name)
+
+    cred_mc, cred_mm = credstore.get_creds()
+    kotone = Kotone(DEVICE_ID, cred_mc, cred_mm)
+    uploaded, matched, not_uploaded = kotone.upload(paths)
+    return 'ok'
 
 
 if __name__ == '__main__':

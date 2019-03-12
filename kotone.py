@@ -24,3 +24,6 @@ class Kotone:
 
     def stream_url(self, song_id: str) -> str:
         return self._mc.get_stream_url(song_id)
+
+    def upload(self, paths):
+        return self._mm.upload(paths)
