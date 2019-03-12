@@ -2,3 +2,4 @@ gmusicapi
 oauth2client
 flask
 google-cloud-datastore
+requests

@@ -1,6 +1,7 @@
 import os
 import io
 import tempfile
+import slack
 from flask import Flask, request, jsonify, render_template, send_file, abort
 from kotone import Kotone
 from credstore import get_flows, CloudDatastoreCredStore, LocalCredStore
@@ -76,6 +77,11 @@ def upload():
     cred_mc, cred_mm = credstore.get_creds()
     kotone = Kotone(DEVICE_ID, cred_mc, cred_mm)
     uploaded, matched, not_uploaded = kotone.upload(paths)
+    uploaded_song_ids = list(uploaded.values())
+    new_songs = [song for song in kotone.get_songs() if song['id'] in uploaded_song_ids]
+    if 'KOTONE_SLACK_WEBHOOK_URL' in os.environ:
+        webhook_url = os.environ['KOTONE_SLACK_WEBHOOK_URL']
+        slack.notify_slack(webhook_url, new_songs)
     return 'ok'
 
 
