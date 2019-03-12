@@ -77,6 +77,8 @@ def upload():
     cred_mc, cred_mm = credstore.get_creds()
     kotone = Kotone(DEVICE_ID, cred_mc, cred_mm)
     uploaded, matched, not_uploaded = kotone.upload(paths)
+    for file, reason in not_uploaded.items():
+        print(f"not uploaded: {reason} [{file}]")
     uploaded_song_ids = list(uploaded.values())
     new_songs = [song for song in kotone.get_songs() if song['id'] in uploaded_song_ids]
     if 'KOTONE_SLACK_WEBHOOK_URL' in os.environ:

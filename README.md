@@ -18,6 +18,7 @@ Download song as file
 
 ```sh
 cd view/
+yarn install
 yarn build
 cd ../
 cp .env.yaml.example .env.yaml

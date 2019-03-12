@@ -1,5 +1,6 @@
 service: kotone
 runtime: python37
+instance_class: F2
 includes:
   - .env.yaml
 
